@@ -21,6 +21,19 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+func RecoveryMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Printf("panic recovered: %v", err)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
+		}()
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func runServer(addr string, handler http.Handler) error {
 	return http.ListenAndServe(addr, handler)
 }
@@ -33,11 +46,23 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello world!"))
 }
 
+func Chain(handler http.Handler, middlewares ...func(http.Handler) http.Handler) http.Handler {
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		handler = middlewares[i](handler)
+	}
+	return handler
+}
+
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", HomeHandler)
-	mux.Handle("/hello", LoggingMiddleware(http.HandlerFunc(HelloHandler)))
-	err := runServer(":8080", mux)
+	mux.HandleFunc("/hello/", HelloHandler)
+	NewMux := Chain(
+		mux,
+		RecoveryMiddleware,
+		LoggingMiddleware,
+	)
+	err := runServer(":8080", NewMux)
 	if err != nil {
 		log.Fatal(err)
 	}
