@@ -1,0 +1,14 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>DeadDrop</header>
+    {{ template "content" . }}
+</body>
+</html>
+{{ end }}
