@@ -1,7 +1,7 @@
 package handler
 
 import (
-	templates "deaddrop/internal/delivery/http/templates"
+	templates "deaddrop/internal/delivery/http/template"
 	"net/http"
 )
 

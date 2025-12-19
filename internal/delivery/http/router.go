@@ -9,10 +9,9 @@ import (
 
 func RegisterRoutes(mux *http.ServeMux) {
 	cwd, _ := os.Getwd()
-	staticDir := filepath.Join(cwd, "..", "..", "static")
+	staticDir := filepath.Join(cwd, "..", "..", "internal", "delivery", "static")
 
 	fileServer := http.FileServer(http.Dir(staticDir))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	mux.HandleFunc("/", handler.HomeHandler)
-
 }
