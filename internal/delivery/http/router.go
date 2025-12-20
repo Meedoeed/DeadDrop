@@ -1,17 +1,13 @@
 package http
 
 import (
+	template "deaddrop/internal/assets"
 	"deaddrop/internal/delivery/http/handler"
 	"net/http"
-	"os"
-	"path/filepath"
 )
 
 func RegisterRoutes(mux *http.ServeMux) {
-	cwd, _ := os.Getwd()
-	staticDir := filepath.Join(cwd, "..", "..", "internal", "delivery", "static")
-
-	fileServer := http.FileServer(http.Dir(staticDir))
-	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
+	staticHandler := http.FileServer(http.FS(template.StaticFS))
+	mux.Handle("/static/", http.StripPrefix("/static/", staticHandler))
 	mux.HandleFunc("/", handler.HomeHandler)
 }

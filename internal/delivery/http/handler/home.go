@@ -1,7 +1,7 @@
 package handler
 
 import (
-	templates "deaddrop/internal/delivery/http/template"
+	template "deaddrop/internal/assets"
 	"net/http"
 )
 
@@ -15,7 +15,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		Title:   "DeadDrop",
 	}
 
-	err := templates.HomeTemplate.ExecuteTemplate(w, "layout", data)
+	err := template.HomeTemplate.ExecuteTemplate(w, "layout", data)
 	if err != nil {
 		http.Error(w, "Render error", http.StatusInternalServerError)
 	}
