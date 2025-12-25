@@ -1,0 +1,56 @@
+package handler
+
+import (
+	"io"
+	"log"
+	"net/http"
+	"path/filepath"
+)
+
+func CreateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	r.Body = http.MaxBytesReader(w, r.Body, 10<<20)
+	if err := r.ParseMultipartForm(20 << 20); err != nil {
+		http.Error(w, "File is too big or invalid form", http.StatusBadRequest)
+		return
+	}
+	message := r.FormValue("message")
+	ttl := r.FormValue("ttl")
+
+	var fileData []byte
+	var fileName string
+	var fileExt string
+
+	if file, fileHeader, err := r.FormFile("file"); err == nil {
+		defer file.Close()
+
+		if fileHeader.Size > 20<<20 {
+			http.Error(w, "file is too big", http.StatusBadRequest)
+			return
+		}
+
+		fileData, err = io.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Cannot read file", http.StatusInternalServerError)
+			return
+		}
+
+		fileName = filepath.Base(fileHeader.Filename)
+		fileExt = filepath.Ext(fileHeader.Filename)
+		log.Printf("%s - %s - %s - %s - %s", fileName, fileExt, fileData, message, ttl)
+		allowedExts := map[string]bool{
+			".jpeg": true,
+			".png":  true,
+			".pdf":  true,
+		}
+
+		if !allowedExts[fileExt] {
+			http.Error(w, "Invalid file type", http.StatusBadRequest)
+			return
+		}
+		log.Printf("%s - %s - %s - %s - %s", fileName, fileExt, fileData, message, ttl)
+	}
+}
