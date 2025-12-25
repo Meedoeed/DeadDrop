@@ -8,4 +8,5 @@ import (
 func RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("/static/", http.StripPrefix("/static/", handler.StaticHandler))
 	mux.HandleFunc("/", handler.HomeHandler)
+	mux.HandleFunc("/create", handler.CreateHandler)
 }
