@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0f001f; /* Постоянный тёмно-фиолетовый фон */
+    color: #e0e0ff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+#particles-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+header {
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00ffff, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200%;
+    animation: pulseGlow 4s ease-in-out infinite, gradientShift 8s linear infinite;
+    margin-bottom: 3rem;
+    text-align: center;
+    letter-spacing: -0.03em;
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(123, 0, 255, 0.6);
+}
+
+form {
+    background: rgba(20, 20, 40, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(123, 0, 255, 0.3);
+    border: 1px solid rgba(123, 0, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+form::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(123, 0, 255, 0.15) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    color: #bb99ff;
+    font-size: 1rem;
+    text-shadow: 0 0 10px rgba(123, 0, 255, 0.4);
+}
+
+small {
+    display: block;
+    margin-top: 0.5rem;
+    color: #8888bb;
+    font-size: 0.9rem;
+}
+
+textarea, input[type="file"], input[type="number"] {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    background: rgba(30, 30, 60, 0.5);
+    border: 1px solid rgba(123, 0, 255, 0.4);
+    border-radius: 14px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+textarea:focus, input:focus {
+    outline: none;
+    border-color: #ff00ff;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.6), 0 0 40px rgba(255, 0, 255, 0.3);
+    background: rgba(40, 40, 80, 0.7);
+    transform: scale(1.02);
+}
+
+input::file-selector-button {
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 1rem;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+    transition: all 0.4s ease;
+}
+
+input::file-selector-button:hover {
+    box-shadow: 0 0 35px rgba(255, 0, 255, 0.9);
+    transform: translateY(-3px);
+}
+
+button {
+    width: 100%;
+    padding: 1.2rem;
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s;
+}
+
+button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 50px rgba(255, 0, 255, 0.9);
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+@keyframes pulseGlow {
+    0%, 100% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+    50% { text-shadow: 0 0 50px rgba(255, 0, 255, 0.8); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+    header { font-size: 2.8rem; }
+    form { padding: 2rem; }
+    h1 { font-size: 1.8rem; }
+}

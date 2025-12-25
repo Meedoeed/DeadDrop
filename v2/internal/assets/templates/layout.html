@@ -1,0 +1,120 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/animations.css">
+    <link href="https://rsms.me/inter/inter.css" rel="stylesheet">
+</head>
+<body>
+    <canvas id="particles-bg"></canvas>
+    <header>DeadDrop</header>
+    {{ template "content" . }}
+    <script>
+        // Автономные частицы на canvas (без внешних библиотек)
+        const canvas = document.getElementById('particles-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 100;
+        const colors = ['#00ffff', '#ff00ff', '#9400ff', '#00ffaa'];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                const opacityHex = Math.floor(this.opacity * 255).toString(16).padStart(2, '0');
+                ctx.fillStyle = this.color + opacityHex;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+        
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(148, 0, 255, ${0.3 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        let mouse = { x: null, y: null, radius: 150 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        
+        function init() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            // Ключевое изменение: полностью очищаем canvas каждый кадр
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            connectParticles();
+            
+            particles.forEach(p => {
+                if (mouse.x && mouse.y) {
+                    let dx = p.x - mouse.x;
+                    let dy = p.y - mouse.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        let directionX = dx / distance || 0;
+                        let directionY = dy / distance || 0;
+                        p.speedX += directionX * force * 0.6;
+                        p.speedY += directionY * force * 0.6;
+                    }
+                }
+                p.update();
+                p.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        init();
+        animate();
+    </script>
+</body>
+</html>
+{{ end }}
