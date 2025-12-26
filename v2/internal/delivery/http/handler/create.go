@@ -40,17 +40,19 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 
 		fileName = filepath.Base(fileHeader.Filename)
 		fileExt = filepath.Ext(fileHeader.Filename)
-		log.Printf("%s - %s - %s - %s - %s", fileName, fileExt, fileData, message, ttl)
+		mime := http.DetectContentType(fileData)
 		allowedExts := map[string]bool{
-			".jpeg": true,
-			".png":  true,
-			".pdf":  true,
+			"image/jpeg":      true,
+			"image/png":       true,
+			"image/gif":       true,
+			"application/pdf": true,
+			"text/plain":      true,
 		}
 
-		if !allowedExts[fileExt] {
+		if !allowedExts[mime] {
 			http.Error(w, "Invalid file type", http.StatusBadRequest)
 			return
 		}
-		log.Printf("%s - %s - %s - %s - %s", fileName, fileExt, fileData, message, ttl)
+		log.Printf("%s - %s - %s - %s", fileName, fileExt, message, ttl)
 	}
 }
