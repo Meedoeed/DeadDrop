@@ -1,11 +1,20 @@
 package handler
 
 import (
+	"deaddrop/internal/usecase"
 	"io"
 	"log"
 	"net/http"
 	"path/filepath"
 )
+
+type LogInfo struct {
+	Id       string
+	Message  string
+	FileName string
+	FileExt  string
+	Ttl      string
+}
 
 func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -53,6 +62,19 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid file type", http.StatusBadRequest)
 			return
 		}
-		log.Printf("%s - %s - %s - %s", fileName, fileExt, message, ttl)
 	}
+	id, err := usecase.GenerateID(10)
+	if err != nil {
+		http.Error(w, "Cannot generate ID", http.StatusInternalServerError)
+		return
+	}
+	log.Printf(
+		"[INFO] POST /create | id=%s file=%s ttl=%s message=%s fileext=%s",
+		id,
+		fileName,
+		ttl,
+		message,
+		fileExt,
+	)
+	http.Redirect(w, r, "/", 303)
 }
