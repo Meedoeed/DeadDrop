@@ -154,10 +154,6 @@ go run cmd/api/main.go
 4. Запушьте ветку (`git push origin feature/amazing-feature`)
 5. Откройте Pull Request
 
-## Лицензия
-
-Этот проект распространяется под лицензией MIT. Подробнее в файле [LICENSE](LICENSE).
-
 ## Контакты
 
 - **Автор статей:** Meedoeed
