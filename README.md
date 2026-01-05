@@ -159,4 +159,4 @@ go run cmd/api/main.go
 - **Автор статей:** Meedoeed
 - **GitHub:** [@Meedoeed](https://github.com/Meedoeed)
 - **Хабр:** [Профиль на Habr](https://habr.com/ru/users/Meedoeed/)
-- **Для вопросов:** Открывайте Issues в репозитории
+- **Для вопросов:** Открывайте Issues в репозитории.
