@@ -8,14 +8,6 @@ import (
 	"path/filepath"
 )
 
-type LogInfo struct {
-	Id       string
-	Message  string
-	FileName string
-	FileExt  string
-	Ttl      string
-}
-
 func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

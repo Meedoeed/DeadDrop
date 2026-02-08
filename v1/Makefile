@@ -10,7 +10,3 @@ run:
 ## Сборка бинарника
 build:
 	go build -o bin/$(APP_NAME) ./$(CMD_DIR)
-
-## Очистка артефактов
-clean:
-	rm -rf bin
