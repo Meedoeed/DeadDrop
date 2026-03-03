@@ -60,9 +60,15 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Cannot generate ID", http.StatusInternalServerError)
 		return
 	}
+	password, err := usecase.GeneratePassword(10)
+	if err != nil {
+		http.Error(w, "Cannot generate password", http.StatusInternalServerError)
+		return
+	}
 	log.Printf(
-		"[INFO] POST /create | id=%s file=%s ttl=%s message=%s fileext=%s",
+		"[INFO] POST /create | id=%s password=%s file=%s ttl=%s message=%s fileext=%s",
 		id,
+		password,
 		fileName,
 		ttl,
 		message,
