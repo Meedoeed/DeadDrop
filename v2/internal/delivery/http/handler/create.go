@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"deaddrop/internal/usecase"
+	"deaddrop/internal/lib/generator"
 	"io"
 	"log"
 	"net/http"
@@ -55,12 +55,12 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	id, err := usecase.GenerateID(10)
+	id, err := generator.GenerateID(10)
 	if err != nil {
 		http.Error(w, "Cannot generate ID", http.StatusInternalServerError)
 		return
 	}
-	password, err := usecase.GeneratePassword(10)
+	password, err := generator.GeneratePassword(10)
 	if err != nil {
 		http.Error(w, "Cannot generate password", http.StatusInternalServerError)
 		return
