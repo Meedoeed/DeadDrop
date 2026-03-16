@@ -13,9 +13,20 @@ var templateFiles embed.FS
 var staticFiles embed.FS
 
 var HomeTemplate = template.Must(
-	template.ParseFS(templateFiles, "templates/*.html"),
+	template.ParseFS(templateFiles, "templates/layout.html", "templates/home.html"),
 )
 
+var ResultTemplate = template.Must(
+	template.ParseFS(templateFiles, "templates/layout.html", "templates/result.html"),
+)
+
+var SecretPassTemplate = template.Must(
+	template.ParseFS(templateFiles, "templates/layout.html", "templates/secret_password.html"),
+)
+
+var SecretContentTemplate = template.Must(
+	template.ParseFS(templateFiles, "templates/layout.html", "templates/secret_content.html"),
+)
 var StaticFS fs.FS
 
 func init() {
